@@ -1,5 +1,9 @@
 #!/bin/bash
 
+
+# Import Functions & Variables
+source "./Functions-resolve-installer.sh"
+
 ### general variables ###
 resolve_luts_source="/media/Edit-space/00 templates/00 StoryTailors LUTS"
 resolve_luts_destination="/opt/resolve/LUT/"
