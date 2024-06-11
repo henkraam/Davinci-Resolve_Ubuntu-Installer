@@ -23,3 +23,4 @@ install_libs
 # Install logic for the apps Resolve and/or Fusion
 install_apps
 
+#test_code

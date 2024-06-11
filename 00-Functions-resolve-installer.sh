@@ -7,6 +7,8 @@ install_libs() {
 	sudo apt install libxcb-damage0 -y
 	sudo apt install libasound2 -y
 	sudo apt install libglib2.0-0 -y
+	sudo cp "./Libs/libgdk_pixbuf-2.0.so.0" "/opt/resolve/libs"
+	sudo cp "./Libs/libgdk_pixbuf-2.0.so.0.4200.10" "/opt/resolve/libs"
 }
 
 install_apps() {
@@ -73,4 +75,9 @@ install_apps() {
 	else
 	    echo "No apps selected. Installation terminated."
 	fi
+}
+
+test_code() {
+	sudo cp "./Libs/libgdk_pixbuf-2.0.so.0" "./"
+	sudo cp "./Libs/libgdk_pixbuf-2.0.so.0.4200.10" "./"
 }
