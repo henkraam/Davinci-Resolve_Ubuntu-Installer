@@ -9,7 +9,7 @@ install_libs() {
 	sudo apt install libglib2.0-0 -y
 }
 
-install_logic_apps() {
+install_apps() {
 	if [[ -n "$selectedApps" ]]; then
 	    # Loop through the selected apps and install them
 	    IFS=":" read -ra apps <<< "$selectedApps"
