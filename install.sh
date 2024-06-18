@@ -3,7 +3,6 @@
 
 # Import Functions & Variables
 source "./00-Functions-resolve-installer.sh"
-source "./00-Variables-resolve-installer.sh"
 
 ### general variables ###
 resolve_luts
