@@ -9,3 +9,10 @@ wget --load-cookies /tmp/cookies.txt "https://docs.google.com/uc?export=download
 
 
 wget "https://drive.google.com/file/d/1mwVcgAlveiWilIoNt4kJ-83OCwLmA4P1/view?usp=sharing&confirm=yes"
+
+
+
+
+ sudo rm /opt/resolve/libs/libglib-2.0.so
+                sudo rm /opt/resolve/libs/libglib-2.0.so.0
+                sudo rm /opt/resolve/libs/libglib-2.0.so.0.6800.4
