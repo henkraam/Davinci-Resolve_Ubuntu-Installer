@@ -3,6 +3,37 @@
 # Import Functions & Variables
 source "./00-Variables-resolve-installer.sh"
 
+command_exists () {
+	command -v "$1" >/dev/null 2>&1
+}
+
+install_curl () {
+	# Check if CURL is installed
+	if command_exists curl; then
+	    echo "curl is already installed."
+	else
+	    echo "curl is not installed. Installing..."
+
+	    # check which package manager is used
+	    if command_exists apt; then
+		sudo apt update
+		sudo apt install -y curl
+	    elif command_exists snap; then
+		sudo snap install curl
+	    else
+		echo "No package manager for this system found. Install curl manualy."
+		exit 1
+	    fi
+
+	    # Final check if CURL is installed
+	    if command_exists curl; then
+		echo "curl has successfully been installed."
+	    else
+		echo "Installation of curl failed"
+		exit 1
+	    fi
+	fi
+}
 
 install_libs() {
 	sudo apt install libapr1 -y
