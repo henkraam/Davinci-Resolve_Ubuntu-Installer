@@ -142,11 +142,40 @@ install_apps() {
 
 grab_blackmagic_packages() {
 	#zenity --tittle "Save locations" --text "Please enter " --entry
+	install_package_folder="Install-app-packages"
+	zip_file="Install-app-packages.zip"
+	
 	if [ ! -d "Install-app-packages" ]; then
 		mkdir "Install-app-packages"
-		wget resolve-install.henkraam.nl -O ./Install-app-packages/Install-app-packages.zip
+		
+		wget resolve-install.henkraam.nl -O ./$install_package_folder/$zip_file
+		
+		# unzip file in same directory
+		unzip "./$install_package_folder/$zip_file" -d "$(dirname "./$install_package_folder/$zip_file")"
+
+		# check if unzip is succesfull
+		if [ $? -eq 0 ]; then
+		    # Verwijder het zip-bestand
+		    rm "./$install_package_folder/$zip_file"
+		    echo "Unpak succesfull and zip-file deleted."
+		else
+		    echo "There was an error while unpacking"
+		fi
+
 	else
-		wget resolve-install.henkraam.nl -O ./Install-app-packages/Install-app-packages.zip
+		wget resolve-install.henkraam.nl -O ./$install_package_folder/$zip_file
+		
+		# unzip file in same directory
+		unzip "./$install_package_folder/$zip_file" -d "$(dirname "./$install_package_folder/$zip_file")"
+
+		# check if unzip is succesfull
+		if [ $? -eq 0 ]; then
+		    # Verwijder het zip-bestand
+		    rm "./$install_package_folder/$zip_file"
+		    echo "Unpak succesfull and zip-file deleted."
+		else
+		    echo "There was an error while unpacking"
+		fi
 	fi
 	
 }
