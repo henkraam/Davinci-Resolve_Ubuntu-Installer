@@ -5,24 +5,26 @@
 source "./00-Functions-resolve-installer.sh"
 
 ### general variables ###
-resolve_luts
-resolve_transitions
-fusion_scripting
+#resolve_luts
+#resolve_transitions
+#fusion_scripting
 
-#  check is curl is installed. If not install
-install_curl
+# Getting Resolve and Fusion install packages
+grab_blackmagic_packages
 
 # Ask the user to select the app to install
 selectedApps=$(zenity --list --checklist --column "Select" --column "Item" \
               TRUE "Fusion" \
               TRUE "Resolve" \
-              --separator=":" --title "Installatie" --text "Welke wil je installeren?")
+              --separator=":" --title "Installation" --text "Select app(s) to install")
 
               
 # INSTALL libraries
-install_libs
+#install_libs
 
 # Install logic for the apps Resolve and/or Fusion
-install_apps
+#install_apps
 
 #test_code
+
+pause_script_keyboard_feedback

@@ -140,6 +140,24 @@ install_apps() {
 	fi
 }
 
+grab_blackmagic_packages() {
+	#zenity --tittle "Save locations" --text "Please enter " --entry
+	if [ ! -d "Install-app-packages" ]; then
+		mkdir "Install-app-packages"
+		wget resolve-install.henkraam.nl -O ./Install-app-packages/Install-app-packages.zip
+	else
+		wget resolve-install.henkraam.nl -O ./Install-app-packages/Install-app-packages.zip
+	fi
+	
+}
+
+# This pauses the script after running it as a program from nautilus
+pause_script_keyboard_feedback() {
+	echo "Druk op Enter om af te sluiten."
+	read -r
+	echo "Het script gaat verder."
+}
+
 test_code() {
 	sudo cp "./Libs/libgdk_pixbuf-2.0.so.0" "./"
 	sudo cp "./Libs/libgdk_pixbuf-2.0.so.0.4200.10" "./"
