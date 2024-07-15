@@ -19,11 +19,14 @@ selectedApps=$(zenity --list --checklist --column "Select" --column "Item" \
               --separator=":" --title "Installation" --text "Select app(s) to install")
 
               
-# INSTALL libraries
-#install_libs
+# INSTALL libraries before we install Resolve and Fusion
+install_libs_pre_BM_installer
 
 # Install logic for the apps Resolve and/or Fusion
-#install_apps
+install_apps
+
+# INSTALL libraries after we install Resolve and Fusion
+install_libs_post_BM_installer
 
 #test_code
 

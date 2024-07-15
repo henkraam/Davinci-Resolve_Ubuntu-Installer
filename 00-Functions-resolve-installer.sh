@@ -35,13 +35,17 @@ install_curl () {
 	fi
 }
 
-install_libs() {
+install_libs_pre_BM_installer() {
 	sudo apt install libapr1 -y
 	sudo apt install libaprutil1 -y
 	sudo apt install libxcb-cursor0 -y
 	sudo apt install libxcb-damage0 -y
 	sudo apt install libasound2 -y
-	sudo apt install libglib2.0-0 -y
+	sudo apt install libglib2.0-0 -y	
+}
+
+install_libs_post_BM_installer() {
+	# Workaround for the faulty default libs. Installing newer libs.
 	sudo cp "./Libs/libgdk_pixbuf-2.0.so.0" "/opt/resolve/libs"
 	sudo cp "./Libs/libgdk_pixbuf-2.0.so.0.4200.10" "/opt/resolve/libs"
 	
@@ -59,7 +63,6 @@ install_libs() {
 	#  Now we added the newer libraries
 	sudo cp "./Libs/libglib-2.0.so.0" "/opt/resolve/libs"
 	sudo cp "./Libs/libglib-2.0.so.0.7800.0" "/opt/resolve/libs"
-	
 }
 
 

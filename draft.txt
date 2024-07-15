@@ -17,3 +17,13 @@ curl -L -o file.out 'https://drive.google.com/uc?export=download&id=1sHLf2FXlaNJ
  sudo rm /opt/resolve/libs/libglib-2.0.so
                 sudo rm /opt/resolve/libs/libglib-2.0.so.0
                 sudo rm /opt/resolve/libs/libglib-2.0.so.0.6800.4
+                
+                
+                
+                
+                
+Resolve
+https://swr.cloud.blackmagicdesign.com/DaVinciResolve/v18.6.6/DaVinci_Resolve_Studio_18.6.6_Linux.zip?verify=1720942886-LYV0ALQN7HHpM%2FGxjKohxlGYKrW9gPAl%2FFYTNdWbUJU%3D
+
+Fusion
+https://swr.cloud.blackmagicdesign.com/Fusion/v18.6.6/Blackmagic_Fusion_Studio_18.6.6_Linux.tar.gz?verify=1720943080-YObIqudeiFBVe4i3WBHHJRL%2BZM77ArDfHzMqk0VSl8k%3D
