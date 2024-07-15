@@ -36,12 +36,24 @@ install_curl () {
 }
 
 install_libs_pre_BM_installer() {
+	# dependencies
+	sudo apt install ocl-icd-opencl-dev -y
+	sudo apt install xorriso -y
+	sudo apt install ffmpeg -y
+	sudo apt install libfdk-aac1 -y
+	sudo apt install gstreamer1.0-plugins-bad gstreamer1.0-plugins-ugly  -y
+	sudo apt install ubuntu-restricted-extras -y
+	sudo apt install libfuse2 -y
+	
+	
+	# libraries
 	sudo apt install libapr1 -y
 	sudo apt install libaprutil1 -y
 	sudo apt install libxcb-cursor0 -y
 	sudo apt install libxcb-damage0 -y
+	sudo apt install libxcb-composite0 -y #temporarly
 	sudo apt install libasound2 -y
-	sudo apt install libglib2.0-0 -y	
+	sudo apt install libglib2.0-0 -y
 }
 
 install_libs_post_BM_installer() {
