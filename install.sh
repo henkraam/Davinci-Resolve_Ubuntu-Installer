@@ -12,20 +12,20 @@ source "./00-Functions-resolve-installer.sh"
 # Getting Resolve and Fusion install packages
 grab_blackmagic_packages
 
-# Ask the user to select the app to install
+# Asks the user to select the app to install
 selectedApps=$(zenity --list --checklist --column "Select" --column "Item" \
               TRUE "Fusion" \
               TRUE "Resolve" \
               --separator=":" --title "Installation" --text "Select app(s) to install")
 
               
-# INSTALL libraries before we install Resolve and Fusion
+# Installs depending libraries and apps before running the Resolve and/or Fusion packages
 install_libs_pre_BM_installer
 
-# Install logic for the apps Resolve and/or Fusion
+# Install the apps Resolve and/or Fusion
 install_apps
 
-# INSTALL libraries after we install Resolve and Fusion
+# Installs depending libraries after running the Resolve and/or Fusion packages
 install_libs_post_BM_installer
 
 #test_code
