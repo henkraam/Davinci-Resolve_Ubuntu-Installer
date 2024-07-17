@@ -157,7 +157,6 @@ install_apps() {
 
 grab_blackmagic_packages() {
 	#zenity --tittle "Save locations" --text "Please enter " --entry
-	install_package_folder="Install-app-packages"
 	zip_file="Install-app-packages.zip"
 	
 	if [ ! -d "Install-app-packages" ]; then

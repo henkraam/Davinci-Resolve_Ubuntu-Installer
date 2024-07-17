@@ -14,3 +14,5 @@ fusion_scripting() {
 	fusion_scripting_source="/media/Software/03 Video/Blackmagic/Scripting/Active-scripts/"
 	fusion_scripting_destination="/var/BlackmagicDesign/Fusion/Scripts/Comp/"
 }
+
+install_package_folder="Install-app-packages"
