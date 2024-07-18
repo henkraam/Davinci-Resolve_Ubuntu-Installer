@@ -91,6 +91,36 @@ centralizing_LUTS() {
 	sudo chmod 775 -R "$resolve_transitions_destination"
 }
 
+BM_app_selector() {
+	selectedApps=$(zenity --list --checklist --column "Select" --column "Item" \
+              TRUE "Fusion" \
+              TRUE "Resolve" \
+              --separator=":" --title "Installation" --text "Select app(s) to install")
+}
+
+loop_through_BMpackages() {
+	# Loop through all .run-files in the directory
+	for file in "$install_package_folder"/*.run; do
+	    if [ -f "$file" ] && [[ "$file" == *$selectedApps* ]]; then
+		echo "Installing $file..."
+		# Make executable
+		chmod +x "$file"
+		# Run .run-file
+		sudo "$file"
+		# Check if run was succesfull
+		if [ $? -eq 0 ]; then
+		    echo "$file succesfully installed."
+		else
+		    echo "Error while running $file."
+		fi
+	    fi
+	done
+
+	# Check if there was no file found
+	if [ $? -ne 0 ]; then
+	    echo "No .run-file containing 'Fusion' found in $install_package_folder"
+	fi
+}
 
 install_apps() {
 	if [[ -n "$selectedApps" ]]; then
@@ -100,24 +130,22 @@ install_apps() {
 		case "$app" in
 		    "Fusion")
 		        # Logic for installing Fusion
-		        if [ -d "/opt/BlackmagicDesign/Fusion18" ]; then
+		        if [ -d "/opt/BlackmagicDesign/Fusion$version_nr" ]; then
 			
 				# if Fusion18 folder is present then uninstall old version
 				zenity --info --title "Fusion" --text "STEP 01: Uninstall old Fusion\n\n STEP 02: Install new Fusion\n\n"
 				
 				### REMOVE OLD VERSION ###
-				sudo /opt/BlackmagicDesign/Fusion18/./FusionInstaller
-				sudo /opt/BlackmagicDesign/FusionRenderNode18/./FusionInstaller
+				sudo "/opt/BlackmagicDesign/Fusion$version_nr/./FusionInstaller"
+				sudo "/opt/BlackmagicDesign/FusionRenderNode$version_nr/./FusionInstaller"
 				
 				### INSTALL FUSION ###
-				sudo ./Install-app-packages/./Fusion.run
-				sudo ./Install-app-packages/./Fusion_render.run
+				loop_through_BMpackages
 			else
 				# if Fusion18 folder is NOT present then just install fusion
 				
 				### INSTALL FUSION ###
-				sudo ./Install-app-packages/./Fusion.run
-				sudo ./Install-app-packages/./Fusion_render.run
+				loop_through_BMpackages
 			fi
 		        ;;
 		    "Resolve")
@@ -130,14 +158,14 @@ install_apps() {
 				### REMOVE OLD VERSION ###
 				sudo /opt/resolve/./installer 
 				
-				### INSTALL RESOLVE ###
-				sudo ./Install-app-packages/./Resolve.run
+				### INSTALL FUSION ###
+				loop_through_BMpackages
 				
 				### Centralized LUTS. Turn on or off by commenting ###
 				centralizing_LUTS
 			else
-				### INSTALL RESOLVE ###
-				sudo ./Install-app-packages/./Resolve.run
+				### INSTALL FUSION ###
+				loop_through_BMpackages
 				
 				### Centralized LUTS. Turn on or off by commenting ###
 				centralizing_LUTS
@@ -156,42 +184,96 @@ install_apps() {
 }
 
 grab_blackmagic_packages() {
-	#zenity --tittle "Save locations" --text "Please enter " --entry
-	zip_file="Install-app-packages.zip"
 	
-	if [ ! -d "Install-app-packages" ]; then
-		mkdir "Install-app-packages"
-		
-		wget resolve-install.henkraam.nl -O ./$install_package_folder/$zip_file
-		
-		# unzip file in same directory
-		unzip "./$install_package_folder/$zip_file" -d "$(dirname "./$install_package_folder/$zip_file")"
+	if [[ -n "$selectedApps" ]]; then
+	    # Loop through the selected apps and download them
+	    IFS=":" read -ra apps <<< "$selectedApps"
+	    for app in "${apps[@]}"; do
+		case "$app" in
+		    "Fusion")
+		        # downloading Fusion
+		        
+		        if [ ! -d "Install-app-packages" ]; then
+				mkdir "Install-app-packages"
+				
+				wget $download_url_fusion -O ./$install_package_folder/$tar_gz_file
+				
+				# unzip file in same directory
+				tar -xzvf "./$install_package_folder/$tar_gz_file" -C "$(dirname "./$install_package_folder/$tar_gz_file")"
 
-		# check if unzip is succesfull
-		if [ $? -eq 0 ]; then
-		    # Verwijder het zip-bestand
-		    rm "./$install_package_folder/$zip_file"
-		    echo "Unpak succesfull and zip-file deleted."
-		else
-		    echo "There was an error while unpacking"
-		fi
+				# check if unzip is succesfull
+				if [ $? -eq 0 ]; then
+				    # Verwijder het zip-bestand
+				    rm "./$install_package_folder/$tar_gz_file"
+				    echo "Unpak succesfull and tar.gz-file deleted."
+				else
+				    echo "There was an error while unpacking"
+				fi
 
+			else
+				#wget $download_url_fusion -O ./$install_package_folder/$tar_gz_file
+				
+				# unzip file in same directory
+				tar -xzvf "./$install_package_folder/$tar_gz_file" -C "$(dirname "./$install_package_folder/$tar_gz_file")"
+
+				# check if unzip is succesfull
+				if [ $? -eq 0 ]; then
+				    # Verwijder het zip-bestand
+				    rm "./$install_package_folder/$tar_gz_file"
+				    echo "Unpak succesfull and tar.gz deleted."
+				else
+				    echo "There was an error while unpacking"
+				fi
+			fi
+		        
+		        ;;
+		    "Resolve")
+			# downloading Resolve
+			
+			if [ ! -d "Install-app-packages" ]; then
+				mkdir "Install-app-packages"
+				
+				wget $download_url_resolve -O ./$install_package_folder/$zip_file
+				
+				# unzip file in same directory
+				unzip "./$install_package_folder/$zip_file" -d "$(dirname "./$install_package_folder/$zip_file")"
+
+				# check if unzip is succesfull
+				if [ $? -eq 0 ]; then
+				    # Verwijder het zip-bestand
+				    rm "./$install_package_folder/$zip_file"
+				    echo "Unpak succesfull and zip-file deleted."
+				else
+				    echo "There was an error while unpacking"
+				fi
+
+			else
+				wget $download_url_resolve -O ./$install_package_folder/$zip_file
+				
+				# unzip file in same directory
+				unzip "./$install_package_folder/$zip_file" -d "$(dirname "./$install_package_folder/$zip_file")"
+
+				# check if unzip is succesfull
+				if [ $? -eq 0 ]; then
+				    # Verwijder het zip-bestand
+				    rm "./$install_package_folder/$zip_file"
+				    echo "Unpak succesfull and zip-file deleted."
+				else
+				    echo "There was an error while unpacking"
+				fi
+			fi			
+			
+		        ;;
+		    *)
+		        echo "Invalid app: $app"
+		        ;;
+		esac
+	    done
+
+	    zenity --info --title "Download app" --text "\n\n Download completed.\n\n"
 	else
-		wget resolve-install.henkraam.nl -O ./$install_package_folder/$zip_file
-		
-		# unzip file in same directory
-		unzip "./$install_package_folder/$zip_file" -d "$(dirname "./$install_package_folder/$zip_file")"
-
-		# check if unzip is succesfull
-		if [ $? -eq 0 ]; then
-		    # Verwijder het zip-bestand
-		    rm "./$install_package_folder/$zip_file"
-		    echo "Unpak succesfull and zip-file deleted."
-		else
-		    echo "There was an error while unpacking"
-		fi
+	    echo "No apps selected. Downloading terminated."
 	fi
-	
 }
 
 # This pauses the script after running it as a program from nautilus
@@ -205,3 +287,4 @@ test_code() {
 	sudo cp "./Libs/libgdk_pixbuf-2.0.so.0" "./"
 	sudo cp "./Libs/libgdk_pixbuf-2.0.so.0.4200.10" "./"
 }
+
