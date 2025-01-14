@@ -20,3 +20,10 @@ zip_file="DaVinci_Resolve_Studio_18.6.6_Linux.zip"
 tar_gz_file="Blackmagic_Fusion_Studio_18.6.6_Linux.tar.gz"
 
 version_nr="18"
+
+
+### App selector #######
+
+app_selector=0
+
+### END App selector ###

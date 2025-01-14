@@ -183,6 +183,46 @@ install_apps() {
 	fi
 }
 
+# Getting latest version of ChromeDriver and installing it. Echoing the path where it is installed.
+install_chromedrive() {
+	# Check if ChromeDriver is installed
+	chromedriver_path="/usr/local/bin/"
+	chromedriver_name="chromedriver"
+	if command_exists chromedriver; then
+	    echo "ChromeDriver is already installed in:"
+		echo "path: "${chromedriver_path}${chromedriver_name}
+	else
+	    echo "ChromeDriver is not installed. Installing..."
+
+	    # getting and installing chromedriver
+		latest_version=$(curl -sS chromedriver.storage.googleapis.com/LATEST_RELEASE)					# looking for latest version
+		wget https://chromedriver.storage.googleapis.com/${latest_version}/chromedriver_linux64.zip		# grabbing latest version
+		unzip chromedriver_linux64.zip
+		sudo mv chromedriver ${chromedriver_path}
+		sudo chmod +x ${chromedriver_path}${chromedriver_name}
+	    
+
+	    # Final check if ChromeDriver is installed
+	    if command_exists chromedriver; then
+		echo "ChromeDriver has successfully been installed in:"
+		echo "path: "${chromedriver_path}${chromedriver_name}
+	    else
+		echo "Installation of ChromeDriver failed"
+		exit 1
+	    fi
+	fi
+}
+
+find_download_link() {  
+	# Functie om de downloadlink te vinden
+	# Vervang 'index.html' door de juiste pagina als deze anders is
+	wget -qO - https://www.blackmagicdesign.com/support/download/edd40117dc3a424296792d423003eeb1/Linux > temp.html
+	# Pas de grep-expressie aan als de structuur van de pagina verandert
+	download_link=$(grep -oP 'href="\Khttps://.*"' temp.html)
+	rm temp.html
+	echo "$download_link"
+}
+
 grab_blackmagic_packages() {
 	
 	if [[ -n "$selectedApps" ]]; then
