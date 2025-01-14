@@ -122,69 +122,92 @@ loop_through_BMpackages() {
 	fi
 }
 
-install_apps() {
-	if [[ -n "$selectedApps" ]]; then
-	    # Loop through the selected apps and install them
-	    IFS=":" read -ra apps <<< "$selectedApps"
-	    for app in "${apps[@]}"; do
-		case "$app" in
-		    "Fusion")
-		        # Logic for installing Fusion
-		        if [ -d "/opt/BlackmagicDesign/Fusion$version_nr" ]; then
+### SOFTWARE/APP RELATED ###
+	# Check app if installed
+	# ARGUMENTS: "app name" apt name
+	check_app_if_installed() {
+		app_to_install=$1
+		if ! [ -x "$(command -v $app_to_install)" ]; then
+			# Als app niet is geïnstalleerd, vraag dan om het wachtwoord via Zenity
+			password=$(zenity --password --title "Installatie van $app_to_install vereist" --text "type uw wachtwoord.")
 			
-				# if Fusion18 folder is present then uninstall old version
-				zenity --info --title "Fusion" --text "STEP 01: Uninstall old Fusion\n\n STEP 02: Install new Fusion\n\n"
-				
-				### REMOVE OLD VERSION ###
-				sudo "/opt/BlackmagicDesign/Fusion$version_nr/./FusionInstaller"
-				sudo "/opt/BlackmagicDesign/FusionRenderNode$version_nr/./FusionInstaller"
-				
-				### INSTALL FUSION ###
-				loop_through_BMpackages
+			# Check if the password is correct
+			if echo "$password" | sudo -S echo ""; then
+				echo "Correct password"
+				echo "Installing $app_to_install"
+				echo "$password" | sudo -S apt-get install $app_to_install -y
+				config_installed_apps $app_to_install
 			else
-				# if Fusion18 folder is NOT present then just install fusion
-				
-				### INSTALL FUSION ###
-				loop_through_BMpackages
+				zenity --error --text="Incorrect password"
+				exit 1
 			fi
-		        ;;
-		    "Resolve")
-			# Logic for installing Resolve
-			if [ -d "/opt/resolve" ]; then
-				
-				# if Fusion18 folder is present then uninstall old version
-				zenity --info --title "Resolve" --text "STEP 01: Uninstall old Resolve\n\n STEP 02: Install new Resolve\n\n"
-				
-				### REMOVE OLD VERSION ###
-				sudo /opt/resolve/./installer 
-				
-				### INSTALL FUSION ###
-				loop_through_BMpackages
-				
-				### Centralized LUTS. Turn on or off by commenting ###
-				centralizing_LUTS
-			else
-				### INSTALL FUSION ###
-				loop_through_BMpackages
-				
-				### Centralized LUTS. Turn on or off by commenting ###
-				centralizing_LUTS
-			fi
-		        ;;
-		    *)
-		        echo "Invalid app: $app"
-		        ;;
-		esac
-	    done
+		fi
+	}
 
-	    zenity --info --title "Installation" --text "\n\n Installation completed.\n\n"
-	else
-	    echo "No apps selected. Installation terminated."
-	fi
-}
+	install_apps() {
+		if [[ -n "$selectedApps" ]]; then
+			# Loop through the selected apps and install them
+			IFS=":" read -ra apps <<< "$selectedApps"
+			for app in "${apps[@]}"; do
+			case "$app" in
+				"Fusion")
+					# Logic for installing Fusion
+					if [ -d "/opt/BlackmagicDesign/Fusion$version_nr" ]; then
+				
+					# if Fusion18 folder is present then uninstall old version
+					zenity --info --title "Fusion" --text "STEP 01: Uninstall old Fusion\n\n STEP 02: Install new Fusion\n\n"
+					
+					### REMOVE OLD VERSION ###
+					sudo "/opt/BlackmagicDesign/Fusion$version_nr/./FusionInstaller"
+					sudo "/opt/BlackmagicDesign/FusionRenderNode$version_nr/./FusionInstaller"
+					
+					### INSTALL FUSION ###
+					loop_through_BMpackages
+				else
+					# if Fusion18 folder is NOT present then just install fusion
+					
+					### INSTALL FUSION ###
+					loop_through_BMpackages
+				fi
+					;;
+				"Resolve")
+				# Logic for installing Resolve
+				if [ -d "/opt/resolve" ]; then
+					
+					# if Fusion18 folder is present then uninstall old version
+					zenity --info --title "Resolve" --text "STEP 01: Uninstall old Resolve\n\n STEP 02: Install new Resolve\n\n"
+					
+					### REMOVE OLD VERSION ###
+					sudo /opt/resolve/./installer 
+					
+					### INSTALL FUSION ###
+					loop_through_BMpackages
+					
+					### Centralized LUTS. Turn on or off by commenting ###
+					centralizing_LUTS
+				else
+					### INSTALL FUSION ###
+					loop_through_BMpackages
+					
+					### Centralized LUTS. Turn on or off by commenting ###
+					centralizing_LUTS
+				fi
+					;;
+				*)
+					echo "Invalid app: $app"
+					;;
+			esac
+			done
+
+			zenity --info --title "Installation" --text "\n\n Installation completed.\n\n"
+		else
+			echo "No apps selected. Installation terminated."
+		fi
+	}
+
 
 # Getting latest version of ChromeDriver and installing it. Echoing the path where it is installed.
-install_chromedrive() {
+install_chromedriver() {
 	# Check if ChromeDriver is installed
 	chromedriver_path="/usr/local/bin/"
 	chromedriver_name="chromedriver"

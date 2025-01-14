@@ -5,9 +5,26 @@
 source "./00-Functions-resolve-installer.sh"
 
 # Getting latest version of ChromeDriver and installing it
-install_chromedrive
+install_chromedriver
+
+# Check app if installed
+# ARGUMENTS: "app name" apt name
+check_app_if_installed
+
+if [ ! -d "venv" ]; then
+    echo "Creating virtual environment..."
+    python3 -m venv venv
+    echo "Virtual environment created."
+fi
 
 source venv/bin/activate
+if [[ "$VIRTUAL_ENV" != "" ]]; then
+    echo "Virtual environment activated."
+else
+    echo "Failed to activate virtual environment."
+    exit 1
+fi
+
 if ! python -c "import selenium" &> /dev/null; then
     python3 -m pip install selenium
 else
