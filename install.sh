@@ -4,17 +4,16 @@
 # Import Functions & Variables
 source "./00-Functions-resolve-installer.sh"
 
-# Getting latest version of ChromeDriver and installing it
-install_chromedriver
-
 # Check app if installed
 # ARGUMENTS: "app name" apt name
-check_app_if_installed
+check_app_if_installed "python3-venv"
+
+pause_script_keyboard_feedback
 
 if [ ! -d "venv" ]; then
-    echo "Creating virtual environment..."
+    echo -e "\nCreating virtual environment...\n"
     python3 -m venv venv
-    echo "Virtual environment created."
+    echo -e "\nVirtual environment created.\n"
 fi
 
 source venv/bin/activate
@@ -28,7 +27,7 @@ fi
 if ! python -c "import selenium" &> /dev/null; then
     python3 -m pip install selenium
 else
-    echo "Selenium is already installed."
+    echo -e "\nSelenium is already installed.\n"
 fi
 
 

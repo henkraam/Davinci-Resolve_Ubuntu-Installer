@@ -144,6 +144,21 @@ loop_through_BMpackages() {
 		fi
 	}
 
+	# Config installed apps
+	# ARGUMENTS: $app_to_install
+	config_installed_apps() {
+		if [ $1 = "plocate" ]; then
+			echo "adding #"
+			sudo sed -i '/PRUNEFS/s/^/#/' "/etc/updatedb.conf"
+			echo "removing /media"
+			sudo sed -i 's/\/media //g' "/etc/updatedb.conf"
+			echo "updating db"
+			sudo updatedb
+		else
+			echo "no app defined"
+		fi
+	}
+
 	install_apps() {
 		if [[ -n "$selectedApps" ]]; then
 			# Loop through the selected apps and install them

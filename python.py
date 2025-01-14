@@ -1,9 +1,15 @@
 import os
 import sys
 
-venv_path = print(sys.prefix)
+# using bash script to install chromedriver
+def install_chromedriver():
+    script_path = os.path.join(os.path.dirname(__file__), '00-Functions-resolve-installer.sh')
+    print(script_path)
+    os.system(f'. "{script_path}" && install_chromedriver')
+    
+# Call the function to install chromedriver
+install_chromedriver()
 
-print(venv_path)
 
 # Add the virtual environment's site-packages to sys.path
 site_packages_path = print(sys.prefix)
