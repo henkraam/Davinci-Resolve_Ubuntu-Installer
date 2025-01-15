@@ -6,9 +6,7 @@ source "./00-Functions-resolve-installer.sh"
 
 # Check app if installed
 # ARGUMENTS: "app name" apt name
-check_app_if_installed "python3-venv"
-
-pause_script_keyboard_feedback
+#check_app_if_installed "python3-venv"
 
 if [ ! -d "venv" ]; then
     echo -e "\nCreating virtual environment...\n"

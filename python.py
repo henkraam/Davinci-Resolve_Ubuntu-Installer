@@ -1,11 +1,17 @@
 import os
 import sys
+import subprocess
 
 # using bash script to install chromedriver
 def install_chromedriver():
-    script_path = os.path.join(os.path.dirname(__file__), '00-Functions-resolve-installer.sh')
-    print(script_path)
-    os.system(f'. "{script_path}" && install_chromedriver')
+    pwd_path = os.getcwd()
+    script_path = os.path.join(pwd_path, '00-Functions-resolve-installer.sh')
+    if os.path.exists(script_path):
+        command = f"bash -c '. \"{script_path}\" && install_chromedriver'"
+        subprocess.run(command, shell=True)
+    else:
+        print("Error: Script '00-Functions-resolve-installer.sh' not found.")
+
     
 # Call the function to install chromedriver
 install_chromedriver()

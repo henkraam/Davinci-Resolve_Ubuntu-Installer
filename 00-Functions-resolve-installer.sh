@@ -141,6 +141,8 @@ loop_through_BMpackages() {
 				zenity --error --text="Incorrect password"
 				exit 1
 			fi
+		else
+			echo "$app_to_install is already installed."
 		fi
 	}
 
